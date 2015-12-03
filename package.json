@@ -19,8 +19,7 @@
   "scripts": {
     "build": "browserify index.js > leaflet-side-by-side.js",
     "postbuild": "uglifyjs leaflet-side-by-side.js -cm -o leaflet-side-by-side.min.js",
-    "prepublish": "npm test && npm run build",
-    "preversion": "npm run prepublish",
+    "preversion": "npm test && npm run build",
     "lint": "standard index.js",
     "start": "budo index.js:leaflet-side-by-side.js --live",
     "test": "npm run lint"
