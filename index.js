@@ -58,6 +58,7 @@ L.Control.SideBySide = L.Control.extend({
     range.min = 0
     range.max = 1
     range.step = 'any'
+    range.value = 0.5
     this._addEvents()
     this._updateLayers()
     this._updateClip()
