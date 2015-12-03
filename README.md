@@ -43,7 +43,7 @@ L.Control.sideBySide(myLayer1, myLayer2).addTo(map);
 
 ### Example
 
-[Live Example](http://gmaclennan.github.io/leaflet-side-by-side/) see [source](index.html)
+[Live Example](http://lab.digital-democracy.org/leaflet-side-by-side/) see [source](index.html)
 
 ### License
 
