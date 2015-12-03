@@ -1,0 +1,53 @@
+{
+  "name": "leaflet-side-by-side",
+  "version": "1.0.0",
+  "description": "Compare two Leaflet layers side by side",
+  "main": "leaflet-side-by-side.js",
+  "files": [
+    "leaflet-side-by-side.js"
+  ],
+  "browserify": {
+    "transform": [
+      "css-img-datauri-stream",
+      "cssify",
+      "browserify-shim"
+    ]
+  },
+  "browserify-shim": {
+    "leaflet": "global:L"
+  },
+  "scripts": {
+    "build": "browserify index.js > leaflet-side-by-side.js",
+    "postbuild": "uglifyjs leaflet-side-by-side.js -cm -o leaflet-side-by-side.min.js",
+    "prepublish": "npm test && npm run build",
+    "preversion": "npm run prepublish",
+    "lint": "standard index.js",
+    "start": "budo index.js:leaflet-side-by-side.js --live",
+    "test": "npm run lint"
+  },
+  "keywords": [
+    "leaflet"
+  ],
+  "author": "Gregor MacLennan / Digital Democracy",
+  "license": "MIT",
+  "devDependencies": {
+    "browserify": "^12.0.1",
+    "browserify-shim": "^3.8.11",
+    "budo": "^7.0.0",
+    "css-img-datauri-stream": "^0.1.5",
+    "cssify": "^0.8.0",
+    "standard": "^5.4.1",
+    "uglify-js": "^2.6.1"
+  },
+  "dependencies": {
+    "leaflet": "^0.7.7"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/digidem/leaflet-side-by-side.git"
+  },
+  "bugs": {
+    "url": "https://github.com/digidem/leaflet-side-by-side/issues"
+  },
+  "homepage": "https://github.com/digidem/leaflet-side-by-side#readme"
+}
