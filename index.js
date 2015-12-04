@@ -33,14 +33,19 @@ function uncancelMapDrag (e) {
   this._map.dragging.enable()
 }
 
+// convert arg to an array - returns empty array if arg is undefined
+function asArray(arg) {
+  return (arg === 'undefined') ? [] : Array.isArray(arg) ? arg : [arg]
+}
+
 function noop () {
   return
 }
 
 L.Control.SideBySide = L.Control.extend({
   initialize: function (leftLayers, rightLayers) {
-    this._leftLayers = Array.isArray(leftLayers) ? leftLayers : [leftLayers]
-    this._rightLayers = Array.isArray(rightLayers) ? rightLayers : [rightLayers]
+    this.setLeftLayers(leftLayers)
+    this.setRightLayers(rightLayers)
   },
 
   getPosition: noop,
@@ -64,7 +69,6 @@ L.Control.SideBySide = L.Control.extend({
     range.value = 0.5
     this._addEvents()
     this._updateLayers()
-    this._updateClip()
     return this
   },
 
@@ -77,6 +81,18 @@ L.Control.SideBySide = L.Control.extend({
 
     this._map = null
 
+    return this
+  },
+
+  setLeftLayers: function (leftLayers) {
+    this._leftLayers = asArray(leftLayers)
+    this._updateLayers()
+    return this
+  },
+
+  setRightLayers: function (rightLayers) {
+    this._rightLayers = asArray(rightLayers)
+    this._updateLayers()
     return this
   },
 
