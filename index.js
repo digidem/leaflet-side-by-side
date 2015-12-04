@@ -11,6 +11,7 @@ function on (el, types, fn, context) {
   })
 }
 
+// Leaflet v0.7 backwards compatibility
 function off (el, types, fn, context) {
   types.split(' ').forEach(function (type) {
     L.DomEvent.off(el, type, fn, context)
@@ -45,6 +46,8 @@ L.Control.SideBySide = L.Control.extend({
   getPosition: noop,
 
   setPosition: noop,
+
+  includes: L.Mixin.Events,
 
   addTo: function (map) {
     this.remove()
@@ -84,8 +87,10 @@ L.Control.SideBySide = L.Control.extend({
     var se = map.containerPointToLayerPoint(map.getSize())
     var offset = (0.5 - rangeValue) * 44
     var clipX = nw.x + (se.x - nw.x) * rangeValue + offset
+    var dividerX = map.getSize().x * rangeValue + offset
 
-    this._divider.style.left = map.getSize().x * rangeValue + offset + 'px'
+    this._divider.style.left = dividerX + 'px'
+    this.fire('dividermove', {x: dividerX})
     var clipLeft = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)'
     var clipRight = 'rect(' + [nw.y, se.x, se.y, clipX].join('px,') + 'px)'
     if (this._leftLayer) {
@@ -97,13 +102,27 @@ L.Control.SideBySide = L.Control.extend({
   },
 
   _updateLayers: function () {
+    var prevLeft = this._leftLayer
+    var prevRight = this._rightLayer
     this._leftLayer = this._rightLayer = null
     this._leftLayers.forEach(function (layer) {
-      if (this._map.hasLayer(layer)) this._leftLayer = layer
+      if (this._map.hasLayer(layer)) {
+        this._leftLayer = layer
+      }
     }, this)
     this._rightLayers.forEach(function (layer) {
-      if (this._map.hasLayer(layer)) this._rightLayer = layer
+      if (this._map.hasLayer(layer)) {
+        this._rightLayer = layer
+      }
     }, this)
+    if (prevLeft !== this._leftLayer) {
+      prevLeft && this.fire('leftlayerremove', {layer: prevLeft})
+      this._leftLayer && this.fire('leftlayeradd', {layer: this._leftLayer})
+    }
+    if (prevRight !== this._rightLayer) {
+      prevRight && this.fire('rightlayerremove', {layer: prevRight})
+      this._rightLayer && this.fire('rightlayeradd', {layer: this._rightLayer})
+    }
     this._updateClip()
   },
 

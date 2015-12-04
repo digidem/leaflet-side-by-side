@@ -10,10 +10,22 @@ Creates a new Leaflet Control for comparing two layers or collections of layers.
 
 ### Parameters
 
-| parameter                     | type           | description                                                                                           |
-| ----------------------------- | -------------- | ----------------------------------------------------------------------------------------------------- |
+| parameter     | type           | description   |
+| ----------    | -------------- | ------------- |
 | `leftLayers`  | L.Layer\|array | A Leaflet Layer or array of layers to show on the left side of the map. Any layers in this array that are added to the map will be shown on the left |
 | `rightLayers` | L.Layer\|array | A Leaflet Layer or array of layers to show on the right side of the map. Any layers in this array that are added to the map will be shown on the right. These *should not be the same as any layers in `leftLayers`* |
+
+### Events
+
+Subscribe to events using [these methods](http://leafletjs.com/reference.html#events)
+
+| Event         | Data           | Description   |
+| ----------    | -------------- | ------------- |
+| `leftlayeradd`  | [LayerEvent](http://leafletjs.com/reference.html#layer-event) | Fired when a layer is added to the left-hand-side pane |
+| `leftlayerremove` | [LayerEvent](http://leafletjs.com/reference.html#layer-event) | Fired when a layer is removed from the left-hand-side pane |
+| `rightlayeradd` | [LayerEvent](http://leafletjs.com/reference.html#layer-event) | Fired when a layer is added to the right-hand-side pane |
+| `rightlayerremove` | [LayerEvent](http://leafletjs.com/reference.html#layer-event) | You guessed it... fired when a layer is removed from the right-hand-side pane |
+| `dividermove` | {x: Number} | Fired when the divider is moved. Returns an event object with the property `x` = the pixels of the divider from the left side of the map container. |
 
 ### Usage
 
