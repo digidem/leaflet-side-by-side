@@ -57,6 +57,11 @@ L.Control.sideBySide(myLayer1, myLayer2).addTo(map);
 
 [Live Example](http://lab.digital-democracy.org/leaflet-side-by-side/) see [source](index.html)
 
+### Limitations
+
+- The divider is not movable with IE.
+- Probably won't work in IE8, but what does?
+
 ### License
 
 MIT
