@@ -2,9 +2,12 @@
   "name": "leaflet-side-by-side",
   "version": "1.1.0",
   "description": "Compare two Leaflet layers side by side",
-  "main": "leaflet-side-by-side.js",
+  "main": "index.js",
   "files": [
-    "leaflet-side-by-side.js"
+    "index.js",
+    "range.css",
+    "range-icon.png",
+    "layout.css"
   ],
   "browserify": {
     "transform": [
@@ -31,14 +34,14 @@
   "license": "MIT",
   "devDependencies": {
     "browserify": "^12.0.1",
-    "browserify-shim": "^3.8.11",
     "budo": "^7.0.0",
-    "css-img-datauri-stream": "^0.1.5",
-    "cssify": "^0.8.0",
     "standard": "^5.4.1",
     "uglify-js": "^2.6.1"
   },
   "dependencies": {
+    "browserify-shim": "^3.8.11",
+    "css-img-datauri-stream": "^0.1.5",
+    "cssify": "^0.8.0",
     "leaflet": "^0.7.7"
   },
   "repository": {
