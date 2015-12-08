@@ -132,6 +132,9 @@ L.Control.SideBySide = L.Control.extend({
   },
 
   _updateLayers: function () {
+    if (!this._map) {
+      return this
+    }
     var prevLeft = this._leftLayer
     var prevRight = this._rightLayer
     this._leftLayer = this._rightLayer = null
