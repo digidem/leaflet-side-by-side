@@ -3,6 +3,7 @@ require('./layout.css')
 require('./range.css')
 
 var mapWasDragEnabled
+var mapWasTapEnabled
 
 // Leaflet v0.7 backwards compatibility
 function on (el, types, fn, context) {
@@ -24,17 +25,23 @@ function getRangeEvent (rangeInput) {
 
 function cancelMapDrag () {
   mapWasDragEnabled = this._map.dragging.enabled()
+  mapWasTapEnabled = this._map.tap && this._map.tap.enabled()
   this._map.dragging.disable()
+  this._map.tap && this._map.tap.disable()
 }
 
 function uncancelMapDrag (e) {
-  if (!mapWasDragEnabled) return
   this._refocusOnMap(e)
-  this._map.dragging.enable()
+  if (mapWasDragEnabled) {
+    this._map.dragging.enable()
+  }
+  if (mapWasTapEnabled) {
+    this._map.tap.enable()
+  }
 }
 
 // convert arg to an array - returns empty array if arg is undefined
-function asArray(arg) {
+function asArray (arg) {
   return (arg === 'undefined') ? [] : Array.isArray(arg) ? arg : [arg]
 }
 

@@ -8,6 +8,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - ADDED: Add `setLeftLayers()` and `setRightLayers()` methods
 - ADDED: `options.padding`
 - FIXED: **[BREAKING]** Export factory function on `L.control` not `L.Control`
+- FIXED: Slider drag was not working on touch devices
 
 ## [v1.1.1] - 2015-12-03
 
