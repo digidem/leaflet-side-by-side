@@ -43,9 +43,15 @@ function noop () {
 }
 
 L.Control.SideBySide = L.Control.extend({
-  initialize: function (leftLayers, rightLayers) {
+  options: {
+    thumbSize: 42,
+    padding: 0
+  },
+
+  initialize: function (leftLayers, rightLayers, options) {
     this.setLeftLayers(leftLayers)
     this.setRightLayers(rightLayers)
+    L.setOptions(this, options)
   },
 
   getPosition: noop,
@@ -67,6 +73,7 @@ L.Control.SideBySide = L.Control.extend({
     range.max = 1
     range.step = 'any'
     range.value = 0.5
+    range.style.paddingLeft = range.style.paddingRight = this.options.padding + 'px'
     this._addEvents()
     this._updateLayers()
     return this
@@ -101,7 +108,7 @@ L.Control.SideBySide = L.Control.extend({
     var rangeValue = this._range.value
     var nw = map.containerPointToLayerPoint([0, 0])
     var se = map.containerPointToLayerPoint(map.getSize())
-    var offset = (0.5 - rangeValue) * 44
+    var offset = (0.5 - rangeValue) * (2 * this.options.padding + this.options.thumbSize)
     var clipX = nw.x + (se.x - nw.x) * rangeValue + offset
     var dividerX = map.getSize().x * rangeValue + offset
 

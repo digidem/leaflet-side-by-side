@@ -14,6 +14,8 @@ Creates a new Leaflet Control for comparing two layers or collections of layers.
 | ----------    | -------------- | ------------- |
 | `leftLayers`  | L.Layer\|array | A Leaflet Layer or array of layers to show on the left side of the map. Any layer added to the map that is in this array will be shown on the left |
 | `rightLayers` | L.Layer\|array | A Leaflet Layer or array of layers to show on the right side of the map. Any layer added to the map that is in this array will be shown on the right. These *should not be* the same as any layers in `leftLayers` |
+| `options`     | Object         | Options |
+| `options.padding` | Number     | Padding between slider min/max and the edge of the screen in pixels. Defaults to `44` - the width of the slider thumb |
 
 ### Events
 

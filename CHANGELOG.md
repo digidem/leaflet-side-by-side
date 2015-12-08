@@ -6,6 +6,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## Unreleased
 
 - ADDED: Add `setLeftLayers()` and `setRightLayers()` methods
+- ADDED: `options.padding`
 - FIXED: **[BREAKING]** Export factory function on `L.control` not `L.Control`
 
 ## [v1.1.1] - 2015-12-03
