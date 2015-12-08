@@ -5,6 +5,7 @@ require('./layout.css')
 require('./range.css')
 
 var mapWasDragEnabled
+var mapWasTapEnabled
 
 // Leaflet v0.7 backwards compatibility
 function on (el, types, fn, context) {
@@ -26,13 +27,24 @@ function getRangeEvent (rangeInput) {
 
 function cancelMapDrag () {
   mapWasDragEnabled = this._map.dragging.enabled()
+  mapWasTapEnabled = this._map.tap && this._map.tap.enabled()
   this._map.dragging.disable()
+  this._map.tap && this._map.tap.disable()
 }
 
 function uncancelMapDrag (e) {
-  if (!mapWasDragEnabled) return
   this._refocusOnMap(e)
-  this._map.dragging.enable()
+  if (mapWasDragEnabled) {
+    this._map.dragging.enable()
+  }
+  if (mapWasTapEnabled) {
+    this._map.tap.enable()
+  }
+}
+
+// convert arg to an array - returns empty array if arg is undefined
+function asArray (arg) {
+  return (arg === 'undefined') ? [] : Array.isArray(arg) ? arg : [arg]
 }
 
 function noop () {
@@ -40,12 +52,22 @@ function noop () {
 }
 
 L.Control.SideBySide = L.Control.extend({
-  initialize: function (leftLayers, rightLayers) {
-    this._leftLayers = Array.isArray(leftLayers) ? leftLayers : [leftLayers]
-    this._rightLayers = Array.isArray(rightLayers) ? rightLayers : [rightLayers]
+  options: {
+    thumbSize: 42,
+    padding: 0
   },
 
-  getPosition: noop,
+  initialize: function (leftLayers, rightLayers, options) {
+    this.setLeftLayers(leftLayers)
+    this.setRightLayers(rightLayers)
+    L.setOptions(this, options)
+  },
+
+  getPosition: function () {
+    var rangeValue = this._range.value
+    var offset = (0.5 - rangeValue) * (2 * this.options.padding + this.options.thumbSize)
+    return this._map.getSize().x * rangeValue + offset
+  },
 
   setPosition: noop,
 
@@ -64,9 +86,9 @@ L.Control.SideBySide = L.Control.extend({
     range.max = 1
     range.step = 'any'
     range.value = 0.5
+    range.style.paddingLeft = range.style.paddingRight = this.options.padding + 'px'
     this._addEvents()
     this._updateLayers()
-    this._updateClip()
     return this
   },
 
@@ -82,14 +104,24 @@ L.Control.SideBySide = L.Control.extend({
     return this
   },
 
+  setLeftLayers: function (leftLayers) {
+    this._leftLayers = asArray(leftLayers)
+    this._updateLayers()
+    return this
+  },
+
+  setRightLayers: function (rightLayers) {
+    this._rightLayers = asArray(rightLayers)
+    this._updateLayers()
+    return this
+  },
+
   _updateClip: function () {
     var map = this._map
-    var rangeValue = this._range.value
     var nw = map.containerPointToLayerPoint([0, 0])
     var se = map.containerPointToLayerPoint(map.getSize())
-    var offset = (0.5 - rangeValue) * 44
-    var clipX = nw.x + (se.x - nw.x) * rangeValue + offset
-    var dividerX = map.getSize().x * rangeValue + offset
+    var clipX = nw.x + this.getPosition()
+    var dividerX = this.getPosition()
 
     this._divider.style.left = dividerX + 'px'
     this.fire('dividermove', {x: dividerX})
@@ -104,6 +136,9 @@ L.Control.SideBySide = L.Control.extend({
   },
 
   _updateLayers: function () {
+    if (!this._map) {
+      return this
+    }
     var prevLeft = this._leftLayer
     var prevRight = this._rightLayer
     this._leftLayer = this._rightLayer = null
@@ -154,11 +189,11 @@ L.Control.SideBySide = L.Control.extend({
   }
 })
 
-L.Control.sideBySide = function (leftLayers, rightLayers, options) {
+L.control.sideBySide = function (leftLayers, rightLayers, options) {
   return new L.Control.SideBySide(leftLayers, rightLayers, options)
 }
 
-module.export = L.Control.sideBySide
+module.exports = L.Control.SideBySide
 
 }).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./layout.css":2,"./range.css":4}],2:[function(require,module,exports){
