@@ -5,6 +5,8 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+## [v2.0.0] - 2015-12-08
+
 - ADDED: Add `setLeftLayers()` and `setRightLayers()` methods
 - ADDED: `options.padding`
 - ADDED: `getPosition()` returns the x coordinate (relative to the map container) of the divider
@@ -24,6 +26,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 Initial release
 
-[Unreleased]: https://github.com/digidem/leaflet-side-by-side/compare/v1.1.1...HEAD
+[Unreleased]: https://github.com/digidem/leaflet-side-by-side/compare/v2.0.0...HEAD
+[Unreleased]: https://github.com/digidem/leaflet-side-by-side/compare/v1.1.1...v2.0.0
 [v1.1.1]: https://github.com/digidem/leaflet-side-by-side/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/digidem/leaflet-side-by-side/compare/v1.0.2...v1.1.0
