@@ -61,7 +61,11 @@ L.Control.SideBySide = L.Control.extend({
     L.setOptions(this, options)
   },
 
-  getPosition: noop,
+  getPosition: function () {
+    var rangeValue = this._range.value
+    var offset = (0.5 - rangeValue) * (2 * this.options.padding + this.options.thumbSize)
+    return this._map.getSize().x * rangeValue + offset
+  },
 
   setPosition: noop,
 
@@ -112,12 +116,10 @@ L.Control.SideBySide = L.Control.extend({
 
   _updateClip: function () {
     var map = this._map
-    var rangeValue = this._range.value
     var nw = map.containerPointToLayerPoint([0, 0])
     var se = map.containerPointToLayerPoint(map.getSize())
-    var offset = (0.5 - rangeValue) * (2 * this.options.padding + this.options.thumbSize)
-    var clipX = nw.x + (se.x - nw.x) * rangeValue + offset
-    var dividerX = map.getSize().x * rangeValue + offset
+    var clipX = nw.x + this.getPosition()
+    var dividerX = this.getPosition()
 
     this._divider.style.left = dividerX + 'px'
     this.fire('dividermove', {x: dividerX})

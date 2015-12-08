@@ -7,6 +7,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - ADDED: Add `setLeftLayers()` and `setRightLayers()` methods
 - ADDED: `options.padding`
+- ADDED: `getPosition()` returns the x coordinate (relative to the map container) of the divider
 - FIXED: **[BREAKING]** Export factory function on `L.control` not `L.Control`
 - FIXED: Slider drag was not working on touch devices
 
