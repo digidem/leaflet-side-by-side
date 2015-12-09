@@ -59,7 +59,7 @@ var myLayer1 = L.tileLayer(...).addTo(map);
 
 var myLayer2 = L.tileLayer(...).addTo(map)
 
-L.Control.sideBySide(myLayer1, myLayer2).addTo(map);
+L.control.sideBySide(myLayer1, myLayer2).addTo(map);
 ```
 
 ### Example
