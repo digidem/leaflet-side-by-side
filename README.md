@@ -4,7 +4,7 @@ A Leaflet control to add a split screen to compare two map overlays.
 
 ![screencast example](screencast.gif)
 
-### L.Control.sideBySide(_leftLayer[s]_, _rightLayer[s]_)
+### L.control.sideBySide(_leftLayer[s]_, _rightLayer[s]_)
 
 Creates a new Leaflet Control for comparing two layers or collections of layers. It does not add the layers to the map - you need to do that manually. Extends `L.Control` but `setPosition()` and `getPosition` are `noop` because the position is always the same - it does not make sense for this control to be in the corner like other Leaflet controls.
 
