@@ -132,7 +132,7 @@ L.Control.SideBySide = L.Control.extend({
     }
     if (this._rightLayers){
       this._rightLayers.forEach(function(layer){
-        layer.getContainer().style.clip = clipLeft
+        layer.getContainer().style.clip = clipRight
       })      
     }
   },
