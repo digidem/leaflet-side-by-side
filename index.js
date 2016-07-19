@@ -95,8 +95,7 @@ L.Control.SideBySide = L.Control.extend({
       return this
     }
     this._removeEvents()
-    L.DomUtil.remove(this._container)
-
+    this._container.parentNode.removeChild(this._container)
     this._map = null
 
     return this
