@@ -94,6 +94,12 @@ L.Control.SideBySide = L.Control.extend({
     if (!this._map) {
       return this
     }
+    if (this._leftLayer) {
+      this._leftLayer.getContainer().style.clip = ""
+    }
+    if (this._rightLayer) {
+      this._rightLayer.getContainer().style.clip = ""
+    }
     this._removeEvents()
     L.DomUtil.remove(this._container)
 
