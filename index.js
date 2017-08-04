@@ -59,7 +59,12 @@ function applyToMissingLayers(map, layers, layersToCheckAgainst, applyFunction) 
       }
     }
   })
+}
 
+function setClip(layer, clip) {
+  if (layer.getContainer()) {
+    layer.getContainer().style.clip = clip
+  }
 }
 
 L.Control.SideBySide = L.Control.extend({
@@ -139,15 +144,15 @@ L.Control.SideBySide = L.Control.extend({
     var clipLeft = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)'
     var clipRight = 'rect(' + [nw.y, se.x, se.y, clipX].join('px,') + 'px)'
     this._leftLayers.forEach(function(layer) {
-      layer.getContainer().style.clip = clipLeft
+      setClip(layer, clipLeft)
     })
     this._rightLayers.forEach(function(layer) {
-      layer.getContainer().style.clip = clipRight
+      setClip(layer, clipRight)
     })
   },
 
   _removeClip: function (layer) {
-    layer.getContainer().style.clip = ''
+    setClip(layer, '')
   },
 
   _updateLayers: function (newLeftLayers, newRightLayers) {
