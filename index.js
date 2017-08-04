@@ -104,9 +104,11 @@ L.Control.SideBySide = L.Control.extend({
   },
 
   remove: function () {
+    // Remove the side-by-side control.
     if (!this._map) {
       return this
     }
+    this._updateLayers([], [])
     this._removeEvents()
     L.DomUtil.remove(this._container)
 
