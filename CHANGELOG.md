@@ -12,6 +12,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - ADDED: `getPosition()` returns the x coordinate (relative to the map container) of the divider
 - FIXED: **[BREAKING]** Export factory function on `L.control` not `L.Control`
 - FIXED: Slider drag was not working on touch devices
+- FIXED: Removing layers from the control did not restore them to both sides
 
 ## [v1.1.1] - 2015-12-03
 
