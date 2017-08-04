@@ -101,8 +101,7 @@ L.Control.SideBySide = L.Control.extend({
       this._rightLayer.getContainer().style.clip = ""
     }
     this._removeEvents()
-    L.DomUtil.remove(this._container)
-
+    this._container.parentNode.removeChild(this._container)
     this._map = null
 
     return this
@@ -131,11 +130,15 @@ L.Control.SideBySide = L.Control.extend({
     this.fire('dividermove', {x: dividerX})
     var clipLeft = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)'
     var clipRight = 'rect(' + [nw.y, se.x, se.y, clipX].join('px,') + 'px)'
-    if (this._leftLayer) {
-      this._leftLayer.getContainer().style.clip = clipLeft
+    if (this._leftLayers){
+      this._leftLayers.forEach(function(layer){
+        layer.getContainer().style.clip = clipLeft
+      })      
     }
-    if (this._rightLayer) {
-      this._rightLayer.getContainer().style.clip = clipRight
+    if (this._rightLayers){
+      this._rightLayers.forEach(function(layer){
+        layer.getContainer().style.clip = clipRight
+      })      
     }
   },
 
