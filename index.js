@@ -51,7 +51,7 @@ function noop () {
 
 function applyToMissingLayers(map, layers, layersToCheckAgainst, applyFunction) {
   // Loops through each layer in layers, and if the layer is on the map but NOT in layersToCheckAgainst,
-  // calls doFunction(layer).
+  // calls applyFunction(layer).
   layers.forEach(function (layer) {
     if (layer && map.hasLayer(layer)) {
       if (layersToCheckAgainst.indexOf(layer) < 0) {
