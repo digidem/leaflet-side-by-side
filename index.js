@@ -104,7 +104,7 @@ L.Control.SideBySide = L.Control.extend({
     range.value = 0.5
     range.style.paddingLeft = range.style.paddingRight = this.options.padding + 'px'
     this._addEvents()
-    this._updateLayers(this._leftLayers, this._rightLayers)
+    this.updateLayers()
     return this
   },
 
@@ -113,7 +113,7 @@ L.Control.SideBySide = L.Control.extend({
     if (!this._map) {
       return this
     }
-    this._updateLayers([], [])
+    this.updateLayers([], [])
     this._removeEvents()
     L.DomUtil.remove(this._container)
 
@@ -123,12 +123,12 @@ L.Control.SideBySide = L.Control.extend({
   },
 
   setLeftLayers: function (leftLayers) {
-    this._updateLayers(asArray(leftLayers), null)
+    this.updateLayers(asArray(leftLayers), null)
     return this
   },
 
   setRightLayers: function (rightLayers) {
-    this._updateLayers(null, asArray(rightLayers))
+    this.updateLayers(null, asArray(rightLayers))
     return this
   },
 
@@ -155,7 +155,11 @@ L.Control.SideBySide = L.Control.extend({
     setClip(layer, '')
   },
 
-  _updateLayers: function (newLeftLayers, newRightLayers) {
+  updateLayers: function (newLeftLayers, newRightLayers) {
+    // Only sets the layers if there is a map.
+    // Only shows the layers if they are on the map.
+    // If either parameter is not supplied, maintains the existing layers on that side.
+    // This can still lead to a change in display if the layers have been added or removed from the map.
     var map = this._map
     if (!map) {
       return this
@@ -163,8 +167,6 @@ L.Control.SideBySide = L.Control.extend({
     var prevLeftLayers = asArray(this._leftLayers)
     var prevRightLayers = asArray(this._rightLayers)
 
-    // If either parameter is not supplied, use the original; this can still lead to events being fired
-    // because whether the layer is on the map can change.
     if (!newLeftLayers) {
       newLeftLayers = asArray(this._leftLayers)
     }
@@ -193,7 +195,7 @@ L.Control.SideBySide = L.Control.extend({
 
   _updateLayersFromEvent: function () {
     // If a layer is added or removed from the map, we don't need to pass which layer it is.
-    this._updateLayers()
+    this.updateLayers()
   },
 
   _addEvents: function () {
