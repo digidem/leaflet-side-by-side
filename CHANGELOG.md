@@ -5,6 +5,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## Unreleased
 
+- ADDED: Allows Leaflet version 0.7.7 through 1.x
 - FIXED: Removing layers from the control did not restore them to both sides
 - FIXED: Better support for multiple layers
 

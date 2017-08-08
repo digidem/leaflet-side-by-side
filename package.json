@@ -36,7 +36,7 @@
     "browserify-shim": "^3.8.11",
     "css-img-datauri-stream": "^0.1.5",
     "cssify": "^0.8.0",
-    "leaflet": "^0.7.7"
+    "leaflet": ">=0.7.7 <2.0.0"
   },
   "repository": {
     "type": "git",
