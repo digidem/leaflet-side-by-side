@@ -49,7 +49,7 @@ function noop () {
   return
 }
 
-function applyToMissingLayers(map, layers, layersToCheckAgainst, applyFunction) {
+function applyToMissingLayers (map, layers, layersToCheckAgainst, applyFunction) {
   // Loops through each layer in layers, and if the layer is on the map but NOT in layersToCheckAgainst,
   // calls applyFunction(layer).
   layers.forEach(function (layer) {
@@ -61,7 +61,7 @@ function applyToMissingLayers(map, layers, layersToCheckAgainst, applyFunction) 
   })
 }
 
-function setClip(layer, clip) {
+function setClip (layer, clip) {
   if (layer.getContainer()) {
     layer.getContainer().style.clip = clip
   }
@@ -74,8 +74,8 @@ L.Control.SideBySide = L.Control.extend({
   },
 
   initialize: function (leftLayers, rightLayers, options) {
-    this.setLeftLayers(leftLayers)
-    this.setRightLayers(rightLayers)
+    this._leftLayers = asArray(leftLayers)
+    this._rightLayers = asArray(rightLayers)
     L.setOptions(this, options)
   },
 
@@ -143,10 +143,10 @@ L.Control.SideBySide = L.Control.extend({
     this.fire('dividermove', {x: dividerX})
     var clipLeft = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)'
     var clipRight = 'rect(' + [nw.y, se.x, se.y, clipX].join('px,') + 'px)'
-    this._leftLayers.forEach(function(layer) {
+    this._leftLayers.forEach(function (layer) {
       setClip(layer, clipLeft)
     })
-    this._rightLayers.forEach(function(layer) {
+    this._rightLayers.forEach(function (layer) {
       setClip(layer, clipRight)
     })
   },
@@ -173,11 +173,11 @@ L.Control.SideBySide = L.Control.extend({
     }
     var that = this
     // Add new layers.
-    applyToMissingLayers(map, newLeftLayers, prevLeftLayers, function(layer) {that.fire('leftlayeradd', {layer: layer})})
-    applyToMissingLayers(map, newRightLayers, prevRightLayers, function(layer) {that.fire('rightlayeradd', {layer: layer})})
+    applyToMissingLayers(map, newLeftLayers, prevLeftLayers, function (layer) { that.fire('leftlayeradd', {layer: layer}) })
+    applyToMissingLayers(map, newRightLayers, prevRightLayers, function (layer) { that.fire('rightlayeradd', {layer: layer}) })
     // Remove layers which were present, but are no longer.
-    applyToMissingLayers(map, prevLeftLayers, newLeftLayers, function(layer) {that.fire('leftlayerremove', {layer: layer})})
-    applyToMissingLayers(map, prevRightLayers, newRightLayers, function(layer) {that.fire('rightlayerremove', {layer: layer})})
+    applyToMissingLayers(map, prevLeftLayers, newLeftLayers, function (layer) { that.fire('leftlayerremove', {layer: layer}) })
+    applyToMissingLayers(map, prevRightLayers, newRightLayers, function (layer) { that.fire('rightlayerremove', {layer: layer}) })
 
     // Any layers which have been removed from the control need their clip css removed, so they appear on both sides.
     applyToMissingLayers(map, prevLeftLayers.concat(prevRightLayers), newLeftLayers.concat(newRightLayers), that._removeClip)
