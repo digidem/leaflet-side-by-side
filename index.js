@@ -164,15 +164,18 @@ L.Control.SideBySide = L.Control.extend({
     if (!map) {
       return this
     }
-    var prevLeftLayers = asArray(this._leftLayers)
-    var prevRightLayers = asArray(this._rightLayers)
+    var prevLeftLayers = this._leftLayers
+    var prevRightLayers = this._rightLayers
 
     if (!newLeftLayers) {
-      newLeftLayers = asArray(this._leftLayers)
+      newLeftLayers = prevLeftLayers
     }
     if (!newRightLayers) {
-      newRightLayers = asArray(this._rightLayers)
+      newRightLayers = prevRightLayers
     }
+    newLeftLayers = asArray(newLeftLayers)
+    newRightLayers = asArray(newRightLayers)
+
     var that = this
     // Add new layers.
     applyToMissingLayers(map, newLeftLayers, prevLeftLayers, function (layer) { that.fire('leftlayeradd', {layer: layer}) })
