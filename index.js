@@ -69,7 +69,7 @@ L.Control.SideBySide = L.Control.extend({
 
   setPosition: noop,
 
-  includes: L.Mixin.Events,
+  includes: L.Evented.prototype || L.Mixin.Events,
 
   addTo: function (map) {
     this.remove()
