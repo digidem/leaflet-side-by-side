@@ -45,9 +45,7 @@ function asArray (arg) {
   return (arg === 'undefined') ? [] : Array.isArray(arg) ? arg : [arg]
 }
 
-function noop () {
-  return
-}
+function noop () {}
 
 L.Control.SideBySide = L.Control.extend({
   options: {
@@ -95,10 +93,10 @@ L.Control.SideBySide = L.Control.extend({
       return this
     }
     if (this._leftLayer) {
-      this._leftLayer.getContainer().style.clip = ""
+      this._leftLayer.getContainer().style.clip = ''
     }
     if (this._rightLayer) {
-      this._rightLayer.getContainer().style.clip = ""
+      this._rightLayer.getContainer().style.clip = ''
     }
     this._removeEvents()
     L.DomUtil.remove(this._container)
