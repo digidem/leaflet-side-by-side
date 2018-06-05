@@ -120,6 +120,13 @@ L.Control.SideBySide = L.Control.extend({
     return this
   },
 
+  _updateLayerClip: function (clip, layer) {
+    var container = layer.getContainer()
+    if (container !== null) {
+      container.style.clip = clip
+    }
+  },
+
   _updateClip: function () {
     var map = this._map
     var nw = map.containerPointToLayerPoint([0, 0])
@@ -132,13 +139,8 @@ L.Control.SideBySide = L.Control.extend({
     var clipLeft = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)'
     var clipRight = 'rect(' + [nw.y, se.x, se.y, clipX].join('px,') + 'px)'
 
-    this._leftLayers.forEach(function (layer) {
-      layer.getContainer().style.clip = clipLeft
-    })
-
-    this._rightLayers.forEach(function (layer) {
-      layer.getContainer().style.clip = clipRight
-    })
+    this._leftLayers.forEach(this._updateLayerClip.bind(this, clipLeft))
+    this._rightLayers.forEach(this._updateLayerClip.bind(this, clipRight))
   },
 
   _updateLayers: function () {
