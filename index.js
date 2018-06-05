@@ -120,7 +120,7 @@ L.Control.SideBySide = L.Control.extend({
 
   _updateLayerClip: function (clip, layer) {
     var container = layer.getContainer()
-    if (container !== null) {
+    if (container !== null && container !== undefined) {
       container.style.clip = clip
     }
   },
