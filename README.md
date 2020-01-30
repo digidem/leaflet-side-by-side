@@ -50,7 +50,7 @@ Or if you are using browserify:
 var sideBySide = require('leaflet-side-by-side')
 ```
 
-Then create a map, add two layers to it, and create the SideBySide control and add it to the map:
+For tile layers create a map, add two layers to it, and create the SideBySide control and add it to the map:
 
 ```js
 var map = L.map('map').setView([51.505, -0.09], 13);
@@ -62,9 +62,29 @@ var myLayer2 = L.tileLayer(...).addTo(map)
 L.control.sideBySide(myLayer1, myLayer2).addTo(map);
 ```
 
-### Example
+For image overlays create a map pane for each layer, create a SideBySide control and add it to the map:
 
-[Live Example](http://lab.digital-democracy.org/leaflet-side-by-side/) see [source](index.html)
+```js
+var map = L.map('map').setView([23.140, -101.887], 5);
+
+map.createPane('left');
+map.createPane('right');
+
+var imgUrl1 = '...',
+imageBounds = [[7.9409, -131.1589], [29.2144, -82.6558]];
+var leftLayer = L.imageOverlay(imgUrl1, imageBounds, {pane: 'left'}).addTo(map);
+
+var imgUrl2 = '...',
+imageBounds = [[7.9409, -131.1589], [29.2144, -82.6558]];
+var imgUrl2 = L.imageOverlay(imgUrl2, imageBounds, {pane: 'right'}).addTo(map);
+
+L.control.sideBySide(leftLayer, rightLayer).addTo(map);
+```
+
+### Examples
+
+- [Live TileLayer Example](http://lab.digital-democracy.org/leaflet-side-by-side/) see [source](index.html)
+- [Live ImageOverlay Example](http://lab.digital-democracy.org/leaflet-side-by-side/) see [source](image-overlay-example.html)
 
 ### Limitations
 
