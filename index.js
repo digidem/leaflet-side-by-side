@@ -88,15 +88,19 @@ L.Control.SideBySide = L.Control.extend({
     return this
   },
 
+  getWrapper: function(layer){
+    return layer.getContainer ? layer.getContainer() : layer.getPane()
+  },
+
   remove: function () {
     if (!this._map) {
       return this
     }
     if (this._leftLayer) {
-      this._leftLayer.getContainer().style.clip = ''
+      this.getWrapper(this._leftLayer).style.clip = '' 
     }
     if (this._rightLayer) {
-      this._rightLayer.getContainer().style.clip = ''
+      this.getWrapper(_rightLayer).style.clip = ''
     }
     this._removeEvents()
     L.DomUtil.remove(this._container)
@@ -130,10 +134,10 @@ L.Control.SideBySide = L.Control.extend({
     var clipLeft = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)'
     var clipRight = 'rect(' + [nw.y, se.x, se.y, clipX].join('px,') + 'px)'
     if (this._leftLayer) {
-      this._leftLayer.getContainer().style.clip = clipLeft
+      this.getWrapper(this._leftLayer).style.clip = clipLeft
     }
     if (this._rightLayer) {
-      this._rightLayer.getContainer().style.clip = clipRight
+      this.getWrapper(this._rightLayer).style.clip = clipRight
     }
   },
 
