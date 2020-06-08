@@ -120,9 +120,21 @@ L.Control.SideBySide = L.Control.extend({
   },
 
   _updateLayerClip: function (clip, layer) {
-    var container = layer.getContainer()
-    if (container !== null && container !== undefined) {
-      container.style.clip = clip
+    if (typeof layer.getContainer === 'function') {
+      // tilelayer
+      var container = layer.getContainer()
+      if (container !== null && container !== undefined) {
+        container.style.clip = clip
+      }
+    } else if (typeof (layer.getLayers) === 'function') {
+      // svg path (geojson)
+      var ll = layer.getLayers()
+      ll.forEach(function(internalLayer) {
+        var el = internalLayer.getElement();
+        if (el !== null && el !== undefined) {
+          el.style.clip = clip
+        }
+      })
     }
   },
 
