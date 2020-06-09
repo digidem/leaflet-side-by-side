@@ -95,11 +95,11 @@ L.Control.SideBySide = L.Control.extend({
     if (!this._map) {
       return this
     }
-    if (this._leftLayer) {
-      this._leftLayer.getContainer().style.clip = ''
+    if (this._leftLayers) {
+      this._leftLayers.forEach(this._updateLayerClip.bind(this, ''))
     }
-    if (this._rightLayer) {
-      this._rightLayer.getContainer().style.clip = ''
+    if (this._rightLayers) {
+      this._rightLayers.forEach(this._updateLayerClip.bind(this, ''))
     }
     this._removeEvents()
     L.DomUtil.remove(this._container)
@@ -130,13 +130,8 @@ L.Control.SideBySide = L.Control.extend({
       }
     } else if (typeof (layer.getLayers) === 'function') {
       // svg path (geojson)
-      var ll = layer.getLayers()
-      ll.forEach(function(internalLayer) {
-        var el = internalLayer.getElement();
-        if (el !== null && el !== undefined) {
-          el.style.clip = clip
-        }
-      })
+      var pane = layer.getPane()
+      pane.style.clip = clip
     }
   },
 
