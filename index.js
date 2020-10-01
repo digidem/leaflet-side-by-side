@@ -88,7 +88,7 @@ L.Control.SideBySide = L.Control.extend({
     return this
   },
 
-  getWrapper: function(layer){
+  getWrapper: function (layer) {
     return layer.getContainer ? layer.getContainer() : layer.getPane()
   },
 
@@ -97,7 +97,7 @@ L.Control.SideBySide = L.Control.extend({
       return this
     }
     if (this._leftLayer) {
-      this.getWrapper(this._leftLayer).style.clip = '' 
+      this.getWrapper(this._leftLayer).style.clip = ''
     }
     if (this._rightLayer) {
       this.getWrapper(this._rightLayer).style.clip = ''
