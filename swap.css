@@ -1,0 +1,46 @@
+.leaflet-sbs-swap {
+    position: absolute;
+    -webkit-appearance: none;
+    margin: 0;
+    padding: 0;
+    background:  #2C405A;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    pointer-events: auto;
+    border: 2px solid #2C405A;
+    color: white;
+    background-image: url("data:image/svg+xml,<svg width='16' height='12' xmlns='http://www.w3.org/2000/svg'><path d='M3.825 5.166L.5 8.499l3.325 3.334v-2.5h5.842V7.666H3.825v-2.5zM15.5 3.499L12.175.166v2.5H6.333v1.667h5.842v2.5L15.5 3.499z' fill='white'/></svg>");
+    background-position: 50% 50%;
+    background-repeat: no-repeat;
+    background-size: 16px 12px;
+    z-index: 999;
+}
+
+.leaflet-sbs-swap:focus {
+    outline: none;
+    box-shadow: 0px 0px 4px white;
+}
+
+.leaflet-sbs-swap::before,
+.leaflet-sbs-swap::after {
+    color: white;
+    position: absolute;
+    font-size: 8px;
+    font-weight: bolder;
+}
+
+.leaflet-sbs-swap::before {
+    content: 'A';
+    content: attr(data-left);
+    top: calc(50% - 11px);
+    left: calc(50% - 11px);
+}
+
+.leaflet-sbs-swap::after {
+    content: 'B';
+    content: attr(data-right);
+    top: calc(50%);
+    left: calc(50% + 4px);
+}

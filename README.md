@@ -15,7 +15,8 @@ Creates a new Leaflet Control for comparing two layers or collections of layers.
 | `leftLayers`  | L.Layer\|array | A Leaflet Layer or array of layers to show on the left side of the map. Any layer added to the map that is in this array will be shown on the left |
 | `rightLayers` | L.Layer\|array | A Leaflet Layer or array of layers to show on the right side of the map. Any layer added to the map that is in this array will be shown on the right. These *should not be* the same as any layers in `leftLayers` |
 | `options`     | Object         | Options |
-| `options.padding` | Number     | Padding between slider min/max and the edge of the screen in pixels. Defaults to `44` - the width of the slider thumb |
+| `options.padding` | Number     | Padding between slider min/max and the edge of the screen in pixels. Defaults to `30` - the width of the slider thumb |
+| `options.swap` | Boolean     | Should display swap button, when both layers available
 
 ### Events
 
@@ -27,7 +28,8 @@ Subscribe to events using [these methods](http://leafletjs.com/reference.html#ev
 | `leftlayerremove` | [LayerEvent](http://leafletjs.com/reference.html#layer-event) | Fired when a layer is removed from the left-hand-side pane |
 | `rightlayeradd` | [LayerEvent](http://leafletjs.com/reference.html#layer-event) | Fired when a layer is added to the right-hand-side pane |
 | `rightlayerremove` | [LayerEvent](http://leafletjs.com/reference.html#layer-event) | You guessed it... fired when a layer is removed from the right-hand-side pane |
-| `dividermove` | {x: Number} | Fired when the divider is moved. Returns an event object with the property `x` = the pixels of the divider from the left side of the map container. |
+| `dividermove` | { x: number } | Fired when the divider is moved. Argument is an event object with the property `x` = the pixels of the divider from the left side of the map container. |
+| `swapped` | { swapped: boolean} | Fired when ths swap button clicked. Argument is an event object with the property `swapped` = the current status of swapping.
 
 ### Methods
 
