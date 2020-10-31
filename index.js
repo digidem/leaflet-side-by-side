@@ -128,8 +128,10 @@ L.Control.SideBySide = L.Control.extend({
       }
     } else if (typeof (layer.getLayers) === 'function') {
       // svg path (geojson)
-      var pane = layer.getPane()
-      pane.style.clip = clip
+      try {
+        var pane = layer.getPane();
+        pane.style.clip = clip;
+      } catch (error) {}
     }
   },
 
