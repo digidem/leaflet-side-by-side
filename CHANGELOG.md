@@ -7,6 +7,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - ADDED: Allows Leaflet version 0.7.7 through 1.x
 
+## [v2.1.1] - 2021-01-09
+
+- Mergerd https://github.com/digidem/leaflet-side-by-side/pull/23#issue-192672703
+- Improved Multi Layer Support
+
 ## [v2.1.0] - 2020-10-01
 
 - ADDED: `options.swap`

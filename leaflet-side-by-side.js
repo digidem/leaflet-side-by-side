@@ -1,5 +1,5 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
-(function (global){
+(function (global){(function (){
 var L = (typeof window !== "undefined" ? window['L'] : typeof global !== "undefined" ? global['L'] : null)
 require('./layout.css')
 require('./range.css')
@@ -83,6 +83,7 @@ L.Control.SideBySide = L.Control.extend({
 
     this._divider = L.DomUtil.create('div', 'leaflet-sbs-divider', container)
     var range = this._range = L.DomUtil.create('input', 'leaflet-sbs-range', container)
+    range.addEventListener('click', function (e) { e.stopPropagation() })
     range.type = 'range'
     range.min = 0
     range.max = 1
@@ -114,11 +115,11 @@ L.Control.SideBySide = L.Control.extend({
     if (!this._map) {
       return this
     }
-    if (this._leftLayer) {
-      this.getWrapper(this._leftLayer).style.clip = ''
+    if (this._leftLayers) {
+      this._leftLayers.forEach(this._updateLayerClip.bind(this, ''))
     }
-    if (this._rightLayer) {
-      this.getWrapper(this._rightLayer).style.clip = ''
+    if (this._rightLayers) {
+      this._rightLayers.forEach(this._updateLayerClip.bind(this, ''))
     }
     this._removeEvents()
     L.DomUtil.remove(this._container)
@@ -140,12 +141,31 @@ L.Control.SideBySide = L.Control.extend({
     return this
   },
 
+  _updateLayerClip: function (clip, layer) {
+    if (typeof layer.getContainer === 'function') {
+      // tilelayer
+      var container = layer.getContainer()
+      if (container !== null && container !== undefined) {
+        container.style.clip = clip
+      }
+    } else if (typeof (layer.getLayers) === 'function') {
+      // svg path (geojson)
+      try {
+        var pane = layer.getPane();
+        pane.style.clip = clip;
+      } catch (error) {
+        console.error(error);//do not like the idea of silent errors
+      }
+    }
+  },
+
   _updateClip: function () {
     var map = this._map
     var nw = map.containerPointToLayerPoint([0, 0])
     var se = map.containerPointToLayerPoint(map.getSize())
     var clipX = nw.x + this.getPosition()
     var dividerX = this.getPosition()
+
     this._divider.style.left = dividerX + 'px'
     this.fire('dividermove', { x: dividerX })
 
@@ -158,12 +178,9 @@ L.Control.SideBySide = L.Control.extend({
 
     var clipLeft = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)'
     var clipRight = 'rect(' + [nw.y, se.x, se.y, clipX].join('px,') + 'px)'
-    if (this._leftLayer) {
-      this.getWrapper(this._leftLayer).style.clip = clipLeft
-    }
-    if (this._rightLayer) {
-      this.getWrapper(this._rightLayer).style.clip = clipRight
-    }
+
+    this._leftLayers.forEach(this._updateLayerClip.bind(this, clipLeft))
+    this._rightLayers.forEach(this._updateLayerClip.bind(this, clipRight))
   },
 
   _updateLayers: function () {
@@ -263,11 +280,11 @@ L.control.sideBySide = function (leftLayers, rightLayers, options) {
 
 module.exports = L.Control.SideBySide
 
-}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
+}).call(this)}).call(this,typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {})
 },{"./layout.css":2,"./range.css":4,"./swap.css":5}],2:[function(require,module,exports){
 var inject = require('./node_modules/cssify');
 var css = ".leaflet-sbs-range {\n    position: absolute;\n    top: 50%;\n    width: 100%;\n    z-index: 999;\n}\n.leaflet-sbs-divider {\n    position: absolute;\n    top: 0;\n    bottom: 0;\n    left: 50%;\n    margin-left: -1px;\n    width: 2px;\n    background-color: #2C405A;\n    pointer-events: none;\n    z-index: 999;\n}\n";
-inject(css, undefined, '_ur26zf');
+inject(css, undefined, '_1u09j9r');
 module.exports = css;
 
 },{"./node_modules/cssify":3}],3:[function(require,module,exports){
@@ -328,13 +345,13 @@ module.exports.byUrl = function (url) {
 },{}],4:[function(require,module,exports){
 var inject = require('./node_modules/cssify');
 var css = ".leaflet-sbs-range {\n    -webkit-appearance: none;\n    display: inline-block !important;\n    vertical-align: middle;\n    height: 0;\n    padding: 0;\n    margin: 0;\n    border: 0;\n    background: rgba(0, 0, 0, 0.25);\n    min-width: 100px;\n    cursor: pointer;\n    pointer-events: none;\n    z-index: 999;\n}\n.leaflet-sbs-range::-ms-fill-upper {\n    background: transparent;\n}\n.leaflet-sbs-range::-ms-fill-lower {\n    background: rgba(255, 255, 255, 0.25);\n}\n/* Browser thingies */\n\n.leaflet-sbs-range::-moz-range-track {\n    opacity: 0;\n}\n.leaflet-sbs-range::-ms-track {\n    opacity: 0;\n}\n.leaflet-sbs-range::-ms-tooltip {\n    display: none;\n}\n/* For whatever reason, these need to be defined\n * on their own so dont group them */\n\n.leaflet-sbs-range::-webkit-slider-thumb {\n    -webkit-appearance: none;\n    margin: 0;\n    padding: 0;\n    background: #fff;\n    height: 30px;\n    width: 30px;\n    border-radius: 50%;\n    cursor: ew-resize;\n    pointer-events: auto;\n    border: 2px solid #2c405a;\n    color: #2c405a;\n    background-image: url(\"data:image/svg+xml,<svg width='6' height='14' xmlns='http://www.w3.org/2000/svg'><path d='M.5.333v13.333h1.667V.333H.5zm5 13.333V.333H3.833v13.333H5.5z' fill='%232C405A'/></svg>\");\n    background-position: 50% 50%;\n    background-repeat: no-repeat;\n    background-size: 6px 14px;\n}\n.leaflet-sbs-range::-ms-thumb {\n    margin: 0;\n    padding: 0;\n    background: #fff;\n    height: 30px;\n    width: 30px;\n    border-radius: 50%;\n    cursor: ew-resize;\n    pointer-events: auto;\n    border: 2px solid #2c405a;\n    color: #2c405a;\n    background-image: url(\"data:image/svg+xml,<svg width='6' height='14' xmlns='http://www.w3.org/2000/svg'><path d='M.5.333v13.333h1.667V.333H.5zm5 13.333V.333H3.833v13.333H5.5z' fill='%232C405A'/></svg>\");\n    background-position: 50% 50%;\n    background-repeat: no-repeat;\n    background-size: 6px 14px;\n}\n.leaflet-sbs-range::-moz-range-thumb {\n    padding: 0;\n    right: 0;\n    background: #fff;\n    height: 30px;\n    width: 30px;\n    border-radius: 50%;\n    cursor: ew-resize;\n    pointer-events: auto;\n    border: 2px solid #2c405a;\n    color: #2c405a;\n    background-image: url(\"data:image/svg+xml,<svg width='6' height='14' xmlns='http://www.w3.org/2000/svg'><path d='M.5.333v13.333h1.667V.333H.5zm5 13.333V.333H3.833v13.333H5.5z' fill='%232C405A'/></svg>\");\n    background-position: 50% 50%;\n    background-repeat: no-repeat;\n    background-size: 6px 14px;\n}\n.leaflet-sbs-range:disabled::-moz-range-thumb {\n    cursor: default;\n}\n.leaflet-sbs-range:disabled::-ms-thumb {\n    cursor: default;\n}\n.leaflet-sbs-range:disabled::-webkit-slider-thumb {\n    cursor: default;\n}\n.leaflet-sbs-range:disabled {\n    cursor: default;\n}\n.leaflet-sbs-range:focus {\n    outline: none !important;\n}\n.leaflet-sbs-range::-moz-focus-outer {\n    border: 0;\n}\n";
-inject(css, undefined, '_op78n2');
+inject(css, undefined, '_g4l216');
 module.exports = css;
 
 },{"./node_modules/cssify":3}],5:[function(require,module,exports){
 var inject = require('./node_modules/cssify');
 var css = ".leaflet-sbs-swap {\n    position: absolute;\n    -webkit-appearance: none;\n    margin: 0;\n    padding: 0;\n    background:  #2C405A;\n    height: 30px;\n    width: 30px;\n    border-radius: 50%;\n    cursor: pointer;\n    pointer-events: auto;\n    border: 2px solid #2C405A;\n    color: white;\n    background-image: url(\"data:image/svg+xml,<svg width='16' height='12' xmlns='http://www.w3.org/2000/svg'><path d='M3.825 5.166L.5 8.499l3.325 3.334v-2.5h5.842V7.666H3.825v-2.5zM15.5 3.499L12.175.166v2.5H6.333v1.667h5.842v2.5L15.5 3.499z' fill='white'/></svg>\");\n    background-position: 50% 50%;\n    background-repeat: no-repeat;\n    background-size: 16px 12px;\n    z-index: 999;\n}\n\n.leaflet-sbs-swap:focus {\n    outline: none;\n    box-shadow: 0px 0px 4px white;\n}\n\n.leaflet-sbs-swap::before,\n.leaflet-sbs-swap::after {\n    color: white;\n    position: absolute;\n    font-size: 8px;\n    font-weight: bolder;\n}\n\n.leaflet-sbs-swap::before {\n    content: 'A';\n    content: attr(data-left);\n    top: calc(50% - 11px);\n    left: calc(50% - 11px);\n}\n\n.leaflet-sbs-swap::after {\n    content: 'B';\n    content: attr(data-right);\n    top: calc(50%);\n    left: calc(50% + 4px);\n}\n";
-inject(css, undefined, '_1fhjik4');
+inject(css, undefined, '_n7f9c');
 module.exports = css;
 
 },{"./node_modules/cssify":3}]},{},[1]);

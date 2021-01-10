@@ -40,7 +40,7 @@
         maxZoom: 16
     }).addTo(map)
 
-    L.control.sideBySide(stamenLayer, osmLayer).addTo(map);
+    L.control.sideBySide(stamenLayer, osmLayer, {swap: true}).addTo(map);
     </script>
 </body>
 </html>
