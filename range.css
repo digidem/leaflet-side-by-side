@@ -68,6 +68,7 @@
 .leaflet-sbs-range::-moz-range-thumb {
     padding: 0;
     right: 0;
+    left:0;
     background: #fff;
     height: 30px;
     width: 30px;

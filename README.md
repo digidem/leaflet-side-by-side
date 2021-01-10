@@ -37,6 +37,8 @@ Subscribe to events using [these methods](http://leafletjs.com/reference.html#ev
 | ----------       | -------------- | ------------- |
 | `setLeftLayers`  | `this`         | Set the layer(s) for the left side  |
 | `setRightLayers` | `this`         | Set the layer(s) for the right side |
+| `addLeftLayer`   | `this`         | Add a layer(s) for the left side  Note: wont add to map|
+| `addRightLayer`  | `this`         | Add a layer(s) for the right side Note: wont add to map |
 
 ### Usage
 

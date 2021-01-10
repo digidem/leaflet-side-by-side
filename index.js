@@ -138,6 +138,17 @@ L.Control.SideBySide = L.Control.extend({
     this._updateLayers()
     return this
   },
+  // Adds an layer to the left side note it is your responsibility to add the layer to the map still
+  addLeftLayer: function (layer) {
+    layer = asArray(layer)
+    this._leftLayers = [...this._leftLayers, ...layer]
+    this._updateLayers()
+  },
+  addRightLayer: function (layer) {
+    layer = asArray(layer)
+    this._rightLayer = [...this._rightLayers, ...layer]
+    this._updateLayers()
+  },
 
   _updateLayerClip: function (clip, layer) {
     if (typeof layer.getContainer === 'function') {
@@ -152,7 +163,7 @@ L.Control.SideBySide = L.Control.extend({
         var pane = layer.getPane();
         pane.style.clip = clip;
       } catch (error) {
-        console.error(error);//do not like the idea of silent errors
+        console.error(error);// do not like the idea of silent errors
       }
     }
   },
