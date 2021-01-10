@@ -7,6 +7,11 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 - ADDED: Allows Leaflet version 0.7.7 through 1.x
 
+## [v2.1.0] - 2020-10-01
+
+- ADDED: `options.swap`
+- ADDED: `swapped` event
+
 ## [v2.0.0] - 2015-12-08
 
 - ADDED: Add `setLeftLayers()` and `setRightLayers()` methods
