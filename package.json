@@ -27,7 +27,7 @@
   "author": "Gregor MacLennan / Digital Democracy",
   "license": "MIT",
   "devDependencies": {
-    "browserify": "^16.2.2",
+    "browserify": "^16.5.2",
     "budo": "^11.2.0",
     "standard": "^11.0.1",
     "uglify-js": "^3.3.24"
