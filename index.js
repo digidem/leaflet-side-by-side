@@ -197,14 +197,14 @@ L.Control.SideBySide = L.Control.extend({
       }
     }, this)
     if (prevLeft !== this._leftLayer) {
-      this._leftLayer.setZIndex(2)
       prevLeft && this.fire('leftlayerremove', {layer: prevLeft})
       this._leftLayer && this.fire('leftlayeradd', {layer: this._leftLayer})
+      this._leftLayer && this._leftLayer.setZIndex(2)
     }
     if (prevRight !== this._rightLayer) {
-      this._rightLayer.setZIndex(2)
       prevRight && this.fire('rightlayerremove', {layer: prevRight})
       this._rightLayer && this.fire('rightlayeradd', {layer: this._rightLayer})
+      this._rightLayer && this._rightLayer.setZIndex(2)
     }
     this._updateClip()
 
