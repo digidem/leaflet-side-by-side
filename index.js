@@ -4,7 +4,19 @@ require('./range.css')
 
 var mapWasDragEnabled
 var mapWasTapEnabled
-
+// Detects iOS
+function iOS() {
+  return [
+    'iPad Simulator',
+    'iPhone Simulator',
+    'iPod Simulator',
+    'iPad',
+    'iPhone',
+    'iPod'
+  ].includes(navigator.platform)
+  // iPad on iOS 13 detection
+    || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
+}
 // Leaflet v0.7 backwards compatibility
 function on (el, types, fn, context) {
   types.split(' ').forEach(function (type) {
@@ -124,18 +136,48 @@ L.Control.SideBySide = L.Control.extend({
     var se = map.containerPointToLayerPoint(map.getSize())
     var clipX = nw.x + this.getPosition()
     var dividerX = this.getPosition()
-
     this._divider.style.left = dividerX + 'px'
     this.fire('dividermove', {x: dividerX})
     var clipLeft = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)'
     var clipRight = 'rect(' + [nw.y, se.x, se.y, clipX].join('px,') + 'px)'
-    if (this._leftLayer) {
-      this._leftLayer.getContainer().style.clip = clipLeft
+    if (iOS()){
+      if (this._leftLayer){
+        sel = this._leftLayer.getContainer()
+        sel.style.clip = 'unset'
+        sel.style.clip = clipLeft
+        // Forces redraw on Safari iOS
+        sel.style.display='none';
+        sel.offsetHeight; // no need to store this anywhere, the reference is enough
+        sel.style.display=''
+
+      }
+      if (this._rightLayer){
+        sel = this._rightLayer.getContainer()
+        sel.style.clip = 'unset'
+        sel.style.clip = clipRight
+        // Forces redraw on Safari iOS
+        sel.style.display='none';
+        sel.offsetHeight; // no need to store this anywhere, the reference is enough
+        sel.style.display=''
+      }
     }
-    if (this._rightLayer) {
-      this._rightLayer.getContainer().style.clip = clipRight
-    }
-  },
+    else {
+      if (this._leftLayer){
+        this._leftLayer.getContainer().style.clip = ''
+        this._leftLayer.getContainer().style.clip = clipLeft
+      }
+      if (this._rightLayer){
+        this._rightLayer.getContainer().style.clip = ''
+        this._rightLayer.getContainer().style.clip = clipRight
+      }
+    }},
+  // Handle changes via control layer
+  _updateOverlay: function (layer){
+    this._rightLayer = layer.layer
+    this._rightLayers.push(layer.layer)},
+  _updateBaseLayer: function (layer){
+    this._leftLayer = layer.layer
+    this._leftLayers.push(layer.layer)},
 
   _updateLayers: function () {
     if (!this._map) {
@@ -157,12 +199,15 @@ L.Control.SideBySide = L.Control.extend({
     if (prevLeft !== this._leftLayer) {
       prevLeft && this.fire('leftlayerremove', {layer: prevLeft})
       this._leftLayer && this.fire('leftlayeradd', {layer: this._leftLayer})
+      this._leftLayer && this._leftLayer.setZIndex(2)
     }
     if (prevRight !== this._rightLayer) {
       prevRight && this.fire('rightlayerremove', {layer: prevRight})
       this._rightLayer && this.fire('rightlayeradd', {layer: this._rightLayer})
+      this._rightLayer && this._rightLayer.setZIndex(2)
     }
     this._updateClip()
+
   },
 
   _addEvents: function () {
@@ -171,9 +216,13 @@ L.Control.SideBySide = L.Control.extend({
     if (!map || !range) return
     map.on('move', this._updateClip, this)
     map.on('layeradd layerremove', this._updateLayers, this)
+    // Handle changes via control layer
+    map.on('overlayadd', this._updateOverlay, this)
+    map.on('baselayerchange', this._updateBaseLayer, this)
     on(range, getRangeEvent(range), this._updateClip, this)
     on(range, L.Browser.touch ? 'touchstart' : 'mousedown', cancelMapDrag, this)
-    on(range, L.Browser.touch ? 'touchend' : 'mouseup', uncancelMapDrag, this)
+    if (iOS()) {on(range, L.Browser.touch ? 'touchmove' : 'mouseup', uncancelMapDrag, this)}
+    else {on(range, L.Browser.touch ? 'touchend' : 'mouseup', uncancelMapDrag, this)}
   },
 
   _removeEvents: function () {
@@ -182,10 +231,13 @@ L.Control.SideBySide = L.Control.extend({
     if (range) {
       off(range, getRangeEvent(range), this._updateClip, this)
       off(range, L.Browser.touch ? 'touchstart' : 'mousedown', cancelMapDrag, this)
-      off(range, L.Browser.touch ? 'touchend' : 'mouseup', uncancelMapDrag, this)
+      if (iOS()) {off(range, L.Browser.touch ? 'touchmove' : 'mouseup', uncancelMapDrag, this)}
+      else {off(range, L.Browser.touch ? 'touchend' : 'mouseup', uncancelMapDrag, this)}
     }
     if (map) {
       map.off('layeradd layerremove', this._updateLayers, this)
+      map.off('overlayadd', this._updateOverlay, this)
+      map.off('baselayerchange', this._updateBaseLayer, this)
       map.off('move', this._updateClip, this)
     }
   }
