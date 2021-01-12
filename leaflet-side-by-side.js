@@ -145,8 +145,8 @@ L.Control.SideBySide = L.Control.extend({
     if (iOS()){
       if (this._leftLayer){
         sel = this._leftLayer.getContainer()
-        this._leftLayer.getContainer().style.clip = 'unset'
-        this._leftLayer.getContainer().style.clip = clipLeft
+        sel.style.clip = 'unset'
+        sel.style.clip = clipLeft
         // Forces redraw on Safari iOS
         sel.style.display='none';
         sel.offsetHeight; // no need to store this anywhere, the reference is enough
@@ -155,8 +155,8 @@ L.Control.SideBySide = L.Control.extend({
       }
       if (this._rightLayer){
         sel = this._rightLayer.getContainer()
-        this._rightLayer.getContainer().style.clip = 'unset'
-        this._rightLayer.getContainer().style.clip = clipRight
+        sel.style.clip = 'unset'
+        sel.style.clip = clipRight
         // Forces redraw on Safari iOS
         sel.style.display='none';
         sel.offsetHeight; // no need to store this anywhere, the reference is enough
