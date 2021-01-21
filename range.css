@@ -1,11 +1,12 @@
 .leaflet-sbs-range {
     -webkit-appearance: none;
-    display: inline-block!important;
+    display: inline-block !important;
     vertical-align: middle;
     height: 0;
     padding: 0;
     margin: 0;
     border: 0;
+    right: 0;
     background: rgba(0, 0, 0, 0.25);
     min-width: 100px;
     cursor: pointer;
@@ -37,46 +38,50 @@
     margin: 0;
     padding: 0;
     background: #fff;
-    height: 40px;
-    width: 40px;
-    border-radius: 20px;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
     cursor: ew-resize;
     pointer-events: auto;
-    border: 1px solid #ddd;
-    background-image: url(range-icon.png);
+    border: 2px solid #2c405a;
+    color: #2c405a;
+    background-image: url("data:image/svg+xml,<svg width='6' height='14' xmlns='http://www.w3.org/2000/svg'><path d='M.5.333v13.333h1.667V.333H.5zm5 13.333V.333H3.833v13.333H5.5z' fill='%232C405A'/></svg>");
     background-position: 50% 50%;
     background-repeat: no-repeat;
-    background-size: 40px 40px;
+    background-size: 6px 14px;
 }
 .leaflet-sbs-range::-ms-thumb {
     margin: 0;
     padding: 0;
     background: #fff;
-    height: 40px;
-    width: 40px;
-    border-radius: 20px;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
     cursor: ew-resize;
     pointer-events: auto;
-    border: 1px solid #ddd;
-    background-image: url(range-icon.png);
+    border: 2px solid #2c405a;
+    color: #2c405a;
+    background-image: url("data:image/svg+xml,<svg width='6' height='14' xmlns='http://www.w3.org/2000/svg'><path d='M.5.333v13.333h1.667V.333H.5zm5 13.333V.333H3.833v13.333H5.5z' fill='%232C405A'/></svg>");
     background-position: 50% 50%;
     background-repeat: no-repeat;
-    background-size: 40px 40px;
+    background-size: 6px 14px;
 }
 .leaflet-sbs-range::-moz-range-thumb {
     padding: 0;
-    right: 0    ;
+    right: 0;
+    left:0;
     background: #fff;
-    height: 40px;
-    width: 40px;
-    border-radius: 20px;
+    height: 30px;
+    width: 30px;
+    border-radius: 50%;
     cursor: ew-resize;
     pointer-events: auto;
-    border: 1px solid #ddd;
-    background-image: url(range-icon.png);
+    border: 2px solid #2c405a;
+    color: #2c405a;
+    background-image: url("data:image/svg+xml,<svg width='6' height='14' xmlns='http://www.w3.org/2000/svg'><path d='M.5.333v13.333h1.667V.333H.5zm5 13.333V.333H3.833v13.333H5.5z' fill='%232C405A'/></svg>");
     background-position: 50% 50%;
     background-repeat: no-repeat;
-    background-size: 40px 40px;
+    background-size: 6px 14px;
 }
 .leaflet-sbs-range:disabled::-moz-range-thumb {
     cursor: default;
@@ -91,9 +96,8 @@
     cursor: default;
 }
 .leaflet-sbs-range:focus {
-    outline: none!important;
+    outline: none !important;
 }
 .leaflet-sbs-range::-moz-focus-outer {
     border: 0;
 }
-

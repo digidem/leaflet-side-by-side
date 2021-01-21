@@ -1,0 +1,54 @@
+version: 2
+_defaults: &defaults
+  working_directory: ~/repo
+  docker:
+    - image: circleci/node:12
+
+_restore_cache: &restore_cache
+  keys:
+    - v3-dependencies-{{ checksum "package.json" }}
+    - v3-dependencies-
+
+_save_cache: &save_cache
+  paths:
+    - node_modules
+    - .build_cache/terser
+  key: v3-dependencies-{{ checksum "package.json" }}
+
+jobs:
+  build_and_test:
+    <<: *defaults
+    steps:
+      - checkout
+      - restore_cache:
+          <<: *restore_cache
+
+      - run: cat /dev/null | npm install
+
+      - save_cache:
+          <<: *save_cache
+
+#      - run:
+#          shell: /bin/bash
+#          command: |
+#            set -e
+#            audit=$(cat /dev/null | npm audit --json | jq '.actions[].resolves[] | select(.id==0 | not)')
+#            if [[ -n ${audit} ]]
+#            then
+#              echo "results are non-empty: ${audit}"
+#              exit 1
+#            else
+#              exit 0
+#            fi
+
+      - run: cat /dev/null | npm run test
+      - run: cat /dev/null | npm run build
+
+      - save_cache:
+          <<: *save_cache
+
+workflows:
+  version: 2
+  all:
+    jobs:
+      - build_and_test
