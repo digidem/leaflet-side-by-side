@@ -146,24 +146,37 @@ L.Control.SideBySide = L.Control.extend({
   },
   addRightLayer: function (layer) {
     layer = asArray(layer)
-    this._rightLayer = [...this._rightLayers, ...layer]
+    this._rightLayers = [...this._rightLayers, ...layer]
     this._updateLayers()
   },
 
   _updateLayerClip: function (clip, layer) {
-    if (typeof layer.getContainer === 'function') {
+    if (!this._map.hasLayer(layer)) {
+      console.warn('Layer Not On Map Cant Clip')
+    } else if (typeof layer.getContainer === 'function') {
       // tilelayer
-      var container = layer.getContainer()
+      let container = layer.getContainer()
       if (container !== null && container !== undefined) {
         container.style.clip = clip
       }
-    } else if (typeof (layer.getLayers) === 'function') {
-      // svg path (geojson)
+      // eslint-disable-next-line brace-style
+    }
+    /* else if (typeof (layer.getLayers) === 'function') {
+      // svg path (geojson)??
+    } */
+    else if (typeof layer.getPane === 'function') {
       try {
-        var pane = layer.getPane();
-        pane.style.clip = clip;
+        let pane = layer.getPane()
+        pane.style.clip = clip
       } catch (error) {
-        console.error(error);// do not like the idea of silent errors
+        // this shouldn't error
+        console.error(error)// do not like the idea of silent errors
+      }
+    } else {
+      if (layer.map == null) {
+        console.warn('Layer May be removed from map cant update clip')
+      } else {
+        console.error('Unsupported Layer Type: ', layer)
       }
     }
   },
@@ -248,11 +261,15 @@ L.Control.SideBySide = L.Control.extend({
       on(range, L.Browser.touch ? 'touchstart' : 'mousedown', cancelMapDrag, this)
       on(range, L.Browser.touch ? 'touchend' : 'mouseup', uncancelMapDrag, this)
     }
-    if (this._leftLayer) {
-      this._leftLayer.on('layeradd layerremove', this._updateLayers, this)
+    if (this._leftLayers) {
+      this._leftLayers.forEach(l => {
+        l.on('layeradd layerremove', this._updateLayers, this)
+      })
     }
-    if (this._rightLayer) {
-      this._rightLayer.on('layeradd layerremove', this._updateLayers, this)
+    if (this._rightLayers) {
+      this._rightLayers.forEach(l => {
+        l.on('layeradd layerremove', this._updateLayers, this)
+      })
     }
     if (swap) {
       on(swap, 'click', this._swapLayers, this)
@@ -271,11 +288,15 @@ L.Control.SideBySide = L.Control.extend({
       off(range, L.Browser.touch ? 'touchstart' : 'mousedown', cancelMapDrag, this)
       off(range, L.Browser.touch ? 'touchend' : 'mouseup', uncancelMapDrag, this)
     }
-    if (this._leftLayer) {
-      this._leftLayer.off('layeradd layerremove', this._updateLayers, this)
+    if (this._leftLayers) {
+      this._leftLayers.forEach(l => {
+        l.off('layeradd layerremove', this._updateLayers, this)
+      })
     }
-    if (this._rightLayer) {
-      this._rightLayer.off('layeradd layerremove', this._updateLayers, this)
+    if (this._rightLayers) {
+      this._rightLayers.forEach(l => {
+        l.off('layeradd layerremove', this._updateLayers, this)
+      })
     }
     if (swap) {
       off(swap, 'click', this._swapLayers, this)

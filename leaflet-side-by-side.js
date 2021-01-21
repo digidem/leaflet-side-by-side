@@ -148,24 +148,37 @@ L.Control.SideBySide = L.Control.extend({
   },
   addRightLayer: function (layer) {
     layer = asArray(layer)
-    this._rightLayer = [...this._rightLayers, ...layer]
+    this._rightLayers = [...this._rightLayers, ...layer]
     this._updateLayers()
   },
 
   _updateLayerClip: function (clip, layer) {
-    if (typeof layer.getContainer === 'function') {
+    if (!this._map.hasLayer(layer)) {
+      console.warn('Layer Not On Map Cant Clip')
+    } else if (typeof layer.getContainer === 'function') {
       // tilelayer
-      var container = layer.getContainer()
+      let container = layer.getContainer()
       if (container !== null && container !== undefined) {
         container.style.clip = clip
       }
-    } else if (typeof (layer.getLayers) === 'function') {
-      // svg path (geojson)
+      // eslint-disable-next-line brace-style
+    }
+    /* else if (typeof (layer.getLayers) === 'function') {
+      // svg path (geojson)??
+    } */
+    else if (typeof layer.getPane === 'function') {
       try {
-        var pane = layer.getPane();
-        pane.style.clip = clip;
+        let pane = layer.getPane()
+        pane.style.clip = clip
       } catch (error) {
-        console.error(error);// do not like the idea of silent errors
+        // this shouldn't error
+        console.error(error)// do not like the idea of silent errors
+      }
+    } else {
+      if (layer.map == null) {
+        console.warn('Layer May be removed from map cant update clip')
+      } else {
+        console.error('Unsupported Layer Type: ', layer)
       }
     }
   },
@@ -250,11 +263,15 @@ L.Control.SideBySide = L.Control.extend({
       on(range, L.Browser.touch ? 'touchstart' : 'mousedown', cancelMapDrag, this)
       on(range, L.Browser.touch ? 'touchend' : 'mouseup', uncancelMapDrag, this)
     }
-    if (this._leftLayer) {
-      this._leftLayer.on('layeradd layerremove', this._updateLayers, this)
+    if (this._leftLayers) {
+      this._leftLayers.forEach(l => {
+        l.on('layeradd layerremove', this._updateLayers, this)
+      })
     }
-    if (this._rightLayer) {
-      this._rightLayer.on('layeradd layerremove', this._updateLayers, this)
+    if (this._rightLayers) {
+      this._rightLayers.forEach(l => {
+        l.on('layeradd layerremove', this._updateLayers, this)
+      })
     }
     if (swap) {
       on(swap, 'click', this._swapLayers, this)
@@ -273,11 +290,15 @@ L.Control.SideBySide = L.Control.extend({
       off(range, L.Browser.touch ? 'touchstart' : 'mousedown', cancelMapDrag, this)
       off(range, L.Browser.touch ? 'touchend' : 'mouseup', uncancelMapDrag, this)
     }
-    if (this._leftLayer) {
-      this._leftLayer.off('layeradd layerremove', this._updateLayers, this)
+    if (this._leftLayers) {
+      this._leftLayers.forEach(l => {
+        l.off('layeradd layerremove', this._updateLayers, this)
+      })
     }
-    if (this._rightLayer) {
-      this._rightLayer.off('layeradd layerremove', this._updateLayers, this)
+    if (this._rightLayers) {
+      this._rightLayers.forEach(l => {
+        l.off('layeradd layerremove', this._updateLayers, this)
+      })
     }
     if (swap) {
       off(swap, 'click', this._swapLayers, this)
@@ -355,7 +376,7 @@ module.exports.byUrl = function (url) {
 
 },{}],4:[function(require,module,exports){
 var inject = require('./node_modules/cssify');
-var css = ".leaflet-sbs-range {\n    -webkit-appearance: none;\n    display: inline-block !important;\n    vertical-align: middle;\n    height: 0;\n    padding: 0;\n    margin: 0;\n    border: 0;\n    background: rgba(0, 0, 0, 0.25);\n    min-width: 100px;\n    cursor: pointer;\n    pointer-events: none;\n    z-index: 999;\n}\n.leaflet-sbs-range::-ms-fill-upper {\n    background: transparent;\n}\n.leaflet-sbs-range::-ms-fill-lower {\n    background: rgba(255, 255, 255, 0.25);\n}\n/* Browser thingies */\n\n.leaflet-sbs-range::-moz-range-track {\n    opacity: 0;\n}\n.leaflet-sbs-range::-ms-track {\n    opacity: 0;\n}\n.leaflet-sbs-range::-ms-tooltip {\n    display: none;\n}\n/* For whatever reason, these need to be defined\n * on their own so dont group them */\n\n.leaflet-sbs-range::-webkit-slider-thumb {\n    -webkit-appearance: none;\n    margin: 0;\n    padding: 0;\n    background: #fff;\n    height: 30px;\n    width: 30px;\n    border-radius: 50%;\n    cursor: ew-resize;\n    pointer-events: auto;\n    border: 2px solid #2c405a;\n    color: #2c405a;\n    background-image: url(\"data:image/svg+xml,<svg width='6' height='14' xmlns='http://www.w3.org/2000/svg'><path d='M.5.333v13.333h1.667V.333H.5zm5 13.333V.333H3.833v13.333H5.5z' fill='%232C405A'/></svg>\");\n    background-position: 50% 50%;\n    background-repeat: no-repeat;\n    background-size: 6px 14px;\n}\n.leaflet-sbs-range::-ms-thumb {\n    margin: 0;\n    padding: 0;\n    background: #fff;\n    height: 30px;\n    width: 30px;\n    border-radius: 50%;\n    cursor: ew-resize;\n    pointer-events: auto;\n    border: 2px solid #2c405a;\n    color: #2c405a;\n    background-image: url(\"data:image/svg+xml,<svg width='6' height='14' xmlns='http://www.w3.org/2000/svg'><path d='M.5.333v13.333h1.667V.333H.5zm5 13.333V.333H3.833v13.333H5.5z' fill='%232C405A'/></svg>\");\n    background-position: 50% 50%;\n    background-repeat: no-repeat;\n    background-size: 6px 14px;\n}\n.leaflet-sbs-range::-moz-range-thumb {\n    padding: 0;\n    right: 0;\n    left:0;\n    background: #fff;\n    height: 30px;\n    width: 30px;\n    border-radius: 50%;\n    cursor: ew-resize;\n    pointer-events: auto;\n    border: 2px solid #2c405a;\n    color: #2c405a;\n    background-image: url(\"data:image/svg+xml,<svg width='6' height='14' xmlns='http://www.w3.org/2000/svg'><path d='M.5.333v13.333h1.667V.333H.5zm5 13.333V.333H3.833v13.333H5.5z' fill='%232C405A'/></svg>\");\n    background-position: 50% 50%;\n    background-repeat: no-repeat;\n    background-size: 6px 14px;\n}\n.leaflet-sbs-range:disabled::-moz-range-thumb {\n    cursor: default;\n}\n.leaflet-sbs-range:disabled::-ms-thumb {\n    cursor: default;\n}\n.leaflet-sbs-range:disabled::-webkit-slider-thumb {\n    cursor: default;\n}\n.leaflet-sbs-range:disabled {\n    cursor: default;\n}\n.leaflet-sbs-range:focus {\n    outline: none !important;\n}\n.leaflet-sbs-range::-moz-focus-outer {\n    border: 0;\n}\n";
+var css = ".leaflet-sbs-range {\n    -webkit-appearance: none;\n    display: inline-block !important;\n    vertical-align: middle;\n    height: 0;\n    padding: 0;\n    margin: 0;\n    border: 0;\n    right: 0;\n    background: rgba(0, 0, 0, 0.25);\n    min-width: 100px;\n    cursor: pointer;\n    pointer-events: none;\n    z-index: 999;\n}\n.leaflet-sbs-range::-ms-fill-upper {\n    background: transparent;\n}\n.leaflet-sbs-range::-ms-fill-lower {\n    background: rgba(255, 255, 255, 0.25);\n}\n/* Browser thingies */\n\n.leaflet-sbs-range::-moz-range-track {\n    opacity: 0;\n}\n.leaflet-sbs-range::-ms-track {\n    opacity: 0;\n}\n.leaflet-sbs-range::-ms-tooltip {\n    display: none;\n}\n/* For whatever reason, these need to be defined\n * on their own so dont group them */\n\n.leaflet-sbs-range::-webkit-slider-thumb {\n    -webkit-appearance: none;\n    margin: 0;\n    padding: 0;\n    background: #fff;\n    height: 30px;\n    width: 30px;\n    border-radius: 50%;\n    cursor: ew-resize;\n    pointer-events: auto;\n    border: 2px solid #2c405a;\n    color: #2c405a;\n    background-image: url(\"data:image/svg+xml,<svg width='6' height='14' xmlns='http://www.w3.org/2000/svg'><path d='M.5.333v13.333h1.667V.333H.5zm5 13.333V.333H3.833v13.333H5.5z' fill='%232C405A'/></svg>\");\n    background-position: 50% 50%;\n    background-repeat: no-repeat;\n    background-size: 6px 14px;\n}\n.leaflet-sbs-range::-ms-thumb {\n    margin: 0;\n    padding: 0;\n    background: #fff;\n    height: 30px;\n    width: 30px;\n    border-radius: 50%;\n    cursor: ew-resize;\n    pointer-events: auto;\n    border: 2px solid #2c405a;\n    color: #2c405a;\n    background-image: url(\"data:image/svg+xml,<svg width='6' height='14' xmlns='http://www.w3.org/2000/svg'><path d='M.5.333v13.333h1.667V.333H.5zm5 13.333V.333H3.833v13.333H5.5z' fill='%232C405A'/></svg>\");\n    background-position: 50% 50%;\n    background-repeat: no-repeat;\n    background-size: 6px 14px;\n}\n.leaflet-sbs-range::-moz-range-thumb {\n    padding: 0;\n    right: 0;\n    left:0;\n    background: #fff;\n    height: 30px;\n    width: 30px;\n    border-radius: 50%;\n    cursor: ew-resize;\n    pointer-events: auto;\n    border: 2px solid #2c405a;\n    color: #2c405a;\n    background-image: url(\"data:image/svg+xml,<svg width='6' height='14' xmlns='http://www.w3.org/2000/svg'><path d='M.5.333v13.333h1.667V.333H.5zm5 13.333V.333H3.833v13.333H5.5z' fill='%232C405A'/></svg>\");\n    background-position: 50% 50%;\n    background-repeat: no-repeat;\n    background-size: 6px 14px;\n}\n.leaflet-sbs-range:disabled::-moz-range-thumb {\n    cursor: default;\n}\n.leaflet-sbs-range:disabled::-ms-thumb {\n    cursor: default;\n}\n.leaflet-sbs-range:disabled::-webkit-slider-thumb {\n    cursor: default;\n}\n.leaflet-sbs-range:disabled {\n    cursor: default;\n}\n.leaflet-sbs-range:focus {\n    outline: none !important;\n}\n.leaflet-sbs-range::-moz-focus-outer {\n    border: 0;\n}\n";
 inject(css, undefined, '_g4l216');
 module.exports = css;
 
