@@ -32,3 +32,7 @@ Initial release
 [Unreleased]: https://github.com/digidem/leaflet-side-by-side/compare/v1.1.1...v2.0.0
 [v1.1.1]: https://github.com/digidem/leaflet-side-by-side/compare/v1.1.0...v1.1.1
 [v1.1.0]: https://github.com/digidem/leaflet-side-by-side/compare/v1.0.2...v1.1.0
+
+## v1.0.3 - 2022-8-22
+
+Update to support leaflet 1.8
