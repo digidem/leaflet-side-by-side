@@ -166,29 +166,33 @@ L.Control.SideBySide = L.Control.extend({
   },
 
   _addEvents: function () {
-    var range = this._range
-    var map = this._map
-    if (!map || !range) return
-    map.on('move', this._updateClip, this)
-    map.on('layeradd layerremove', this._updateLayers, this)
-    on(range, getRangeEvent(range), this._updateClip, this)
-    on(range, L.Browser.touch ? 'touchstart' : 'mousedown', cancelMapDrag, this)
-    on(range, L.Browser.touch ? 'touchend' : 'mouseup', uncancelMapDrag, this)
+    var range = this._range;
+    var map = this._map;
+    if (!map || !range) return;
+    map.on("move", this._updateClip, this);
+    map.on("layeradd layerremove", this._updateLayers, this);
+    L.DomEvent.on(range, getRangeEvent(range), this._updateClip, this);
+    L.DomEvent.on(range, "touchstart", cancelMapDrag, this);
+    L.DomEvent.on(range, "touchend", uncancelMapDrag, this);
+    L.DomEvent.on(range, "mousedown", cancelMapDrag, this);
+    L.DomEvent.on(range, "mouseup", uncancelMapDrag, this);
   },
 
   _removeEvents: function () {
-    var range = this._range
-    var map = this._map
+    var range = this._range;
+    var map = this._map;
     if (range) {
-      off(range, getRangeEvent(range), this._updateClip, this)
-      off(range, L.Browser.touch ? 'touchstart' : 'mousedown', cancelMapDrag, this)
-      off(range, L.Browser.touch ? 'touchend' : 'mouseup', uncancelMapDrag, this)
+      L.DomEvent.off(range, getRangeEvent(range), this._updateClip, this);
+      L.DomEvent.off(range, "touchstart", cancelMapDrag, this);
+      L.DomEvent.off(range, "touchend", uncancelMapDrag, this);
+      L.DomEvent.off(range, "mousedown", cancelMapDrag, this);
+      L.DomEvent.off(range, "mouseup", uncancelMapDrag, this);
     }
     if (map) {
-      map.off('layeradd layerremove', this._updateLayers, this)
-      map.off('move', this._updateClip, this)
+      map.off("layeradd layerremove", this._updateLayers, this);
+      map.off("move", this._updateClip, this);
     }
-  }
+  },
 })
 
 L.control.sideBySide = function (leftLayers, rightLayers, options) {
