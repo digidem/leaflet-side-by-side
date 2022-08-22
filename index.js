@@ -77,6 +77,7 @@ L.Control.SideBySide = L.Control.extend({
 
     this._divider = L.DomUtil.create('div', 'leaflet-sbs-divider', container)
     var range = this._range = L.DomUtil.create('input', 'leaflet-sbs-range', container)
+    range.addEventListener('click', function (e) { e.stopPropagation() })
     range.type = 'range'
     range.min = 0
     range.max = 1
@@ -118,6 +119,13 @@ L.Control.SideBySide = L.Control.extend({
     return this
   },
 
+  _updateLayerClip: function (clip, layer) {
+    var container = layer.getContainer()
+    if (container !== null && container !== undefined) {
+      container.style.clip = clip
+    }
+  },
+
   _updateClip: function () {
     var map = this._map
     var nw = map.containerPointToLayerPoint([0, 0])
@@ -129,12 +137,9 @@ L.Control.SideBySide = L.Control.extend({
     this.fire('dividermove', {x: dividerX})
     var clipLeft = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)'
     var clipRight = 'rect(' + [nw.y, se.x, se.y, clipX].join('px,') + 'px)'
-    if (this._leftLayer) {
-      this._leftLayer.getContainer().style.clip = clipLeft
-    }
-    if (this._rightLayer) {
-      this._rightLayer.getContainer().style.clip = clipRight
-    }
+
+    this._leftLayers.forEach(this._updateLayerClip.bind(this, clipLeft))
+    this._rightLayers.forEach(this._updateLayerClip.bind(this, clipRight))
   },
 
   _updateLayers: function () {
