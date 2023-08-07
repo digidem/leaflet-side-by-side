@@ -1,6 +1,4 @@
 var L = require('leaflet')
-require('./layout.css')
-require('./range.css')
 
 var mapWasDragEnabled
 var mapWasTapEnabled
