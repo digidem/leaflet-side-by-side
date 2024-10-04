@@ -87,6 +87,8 @@ L.Control.SideBySide = L.Control.extend({
     range.style.paddingLeft = range.style.paddingRight = this.options.padding + 'px'
     this._addEvents()
     this._updateLayers()
+
+    L.DomEvent.disableClickPropagation(this._container);
     return this
   },
 
