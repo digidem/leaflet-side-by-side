@@ -1,36 +1,45 @@
-var L = require('leaflet')
-require('./layout.css')
-require('./range.css')
+import layoutCss from "./layout.css";
+import rangeCss from "./range.css";
+
+function injectStyle(css) {
+  const style = document.createElement("style");
+  style.textContent = css;
+  document.head.appendChild(style);
+}
+
+// Inject both CSS files
+injectStyle(layoutCss);
+injectStyle(rangeCss);
 
 var mapWasDragEnabled
 var mapWasTapEnabled
 
 // Leaflet v0.7 backwards compatibility
-function on (el, types, fn, context) {
+function on(el, types, fn, context) {
   types.split(' ').forEach(function (type) {
     L.DomEvent.on(el, type, fn, context)
   })
 }
 
 // Leaflet v0.7 backwards compatibility
-function off (el, types, fn, context) {
+function off(el, types, fn, context) {
   types.split(' ').forEach(function (type) {
     L.DomEvent.off(el, type, fn, context)
   })
 }
 
-function getRangeEvent (rangeInput) {
+function getRangeEvent(rangeInput) {
   return 'oninput' in rangeInput ? 'input' : 'change'
 }
 
-function cancelMapDrag () {
+function cancelMapDrag() {
   mapWasDragEnabled = this._map.dragging.enabled()
   mapWasTapEnabled = this._map.tap && this._map.tap.enabled()
   this._map.dragging.disable()
   this._map.tap && this._map.tap.disable()
 }
 
-function uncancelMapDrag (e) {
+function uncancelMapDrag(e) {
   this._refocusOnMap(e)
   if (mapWasDragEnabled) {
     this._map.dragging.enable()
@@ -41,11 +50,11 @@ function uncancelMapDrag (e) {
 }
 
 // convert arg to an array - returns empty array if arg is undefined
-function asArray (arg) {
+function asArray(arg) {
   return (arg === 'undefined') ? [] : Array.isArray(arg) ? arg : [arg]
 }
 
-function noop () {}
+function noop() { }
 
 L.Control.SideBySide = L.Control.extend({
   options: {
@@ -126,7 +135,7 @@ L.Control.SideBySide = L.Control.extend({
     var dividerX = this.getPosition()
 
     this._divider.style.left = dividerX + 'px'
-    this.fire('dividermove', {x: dividerX})
+    this.fire('dividermove', { x: dividerX })
     var clipLeft = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)'
     var clipRight = 'rect(' + [nw.y, se.x, se.y, clipX].join('px,') + 'px)'
     if (this._leftLayer) {
@@ -155,12 +164,12 @@ L.Control.SideBySide = L.Control.extend({
       }
     }, this)
     if (prevLeft !== this._leftLayer) {
-      prevLeft && this.fire('leftlayerremove', {layer: prevLeft})
-      this._leftLayer && this.fire('leftlayeradd', {layer: this._leftLayer})
+      prevLeft && this.fire('leftlayerremove', { layer: prevLeft })
+      this._leftLayer && this.fire('leftlayeradd', { layer: this._leftLayer })
     }
     if (prevRight !== this._rightLayer) {
-      prevRight && this.fire('rightlayerremove', {layer: prevRight})
-      this._rightLayer && this.fire('rightlayeradd', {layer: this._rightLayer})
+      prevRight && this.fire('rightlayerremove', { layer: prevRight })
+      this._rightLayer && this.fire('rightlayeradd', { layer: this._rightLayer })
     }
     this._updateClip()
   },

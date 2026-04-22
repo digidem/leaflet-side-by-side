@@ -3,22 +3,13 @@
   "version": "2.2.0",
   "description": "Compare two Leaflet layers side by side",
   "main": "index.js",
-  "browserify": {
-    "transform": [
-      "css-img-datauri-stream",
-      "cssify",
-      "browserify-shim"
-    ]
-  },
-  "browserify-shim": {
-    "leaflet": "global:L"
-  },
   "scripts": {
-    "build": "browserify index.js > leaflet-side-by-side.js",
-    "postbuild": "uglifyjs leaflet-side-by-side.js -cm -o leaflet-side-by-side.min.js",
+    "build": "npm run build:js && npm run build:min",
+    "build:js": "esbuild index.js --bundle --format=iife --platform=browser --target=es2018 --external:leaflet --loader:.css=text --outfile=leaflet-side-by-side.js",
+    "build:min": "esbuild index.js --bundle --format=iife --platform=browser --target=es2018 --external:leaflet --loader:.css=text --minify --outfile=leaflet-side-by-side.min.js",
     "preversion": "npm test && npm run build",
     "lint": "standard index.js",
-    "start": "budo index.js:leaflet-side-by-side.js --live",
+    "start": "esbuild index.js --bundle --format=iife --platform=browser --target=es2018 --external:leaflet --loader:.css=text --outfile=leaflet-side-by-side.js --servedir=. --watch",
     "test": "npm run lint"
   },
   "keywords": [
@@ -27,15 +18,10 @@
   "author": "Gregor MacLennan / Digital Democracy",
   "license": "MIT",
   "devDependencies": {
-    "browserify": "^16.2.2",
-    "budo": "^11.2.0",
-    "standard": "^11.0.1",
-    "uglify-js": "^3.3.24"
+    "esbuild": "^0.25.11",
+    "standard": "^17.1.2"
   },
   "dependencies": {
-    "browserify-shim": "^3.8.14",
-    "css-img-datauri-stream": "^0.1.5",
-    "cssify": "^1.0.3",
     "leaflet": ">=0.7.7 <2.0.0"
   },
   "repository": {

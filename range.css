@@ -1,6 +1,6 @@
 .leaflet-sbs-range {
     -webkit-appearance: none;
-    display: inline-block!important;
+    display: inline-block !important;
     vertical-align: middle;
     height: 0;
     padding: 0;
@@ -12,23 +12,29 @@
     pointer-events: none;
     z-index: 999;
 }
+
 .leaflet-sbs-range::-ms-fill-upper {
     background: transparent;
 }
+
 .leaflet-sbs-range::-ms-fill-lower {
     background: rgba(255, 255, 255, 0.25);
 }
+
 /* Browser thingies */
 
 .leaflet-sbs-range::-moz-range-track {
     opacity: 0;
 }
+
 .leaflet-sbs-range::-ms-track {
     opacity: 0;
 }
+
 .leaflet-sbs-range::-ms-tooltip {
     display: none;
 }
+
 /* For whatever reason, these need to be defined
  * on their own so dont group them */
 
@@ -43,11 +49,12 @@
     cursor: ew-resize;
     pointer-events: auto;
     border: 1px solid #ddd;
-    background-image: url(range-icon.png);
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAMAAAC5zwKfAAAABlBMVEV9fX3///+Kct39AAAAAnRSTlP/AOW3MEoAAAA9SURBVFjD7dehDQAwDANBZ/+l2wmKoiqR7pHRcaeaCxAIBAL/g7k9JxAIBAKBQCAQCAQC14H+MhAIBE4CD3fOFvGVBzhZAAAAAElFTkSuQmCC);
     background-position: 50% 50%;
     background-repeat: no-repeat;
     background-size: 40px 40px;
 }
+
 .leaflet-sbs-range::-ms-thumb {
     margin: 0;
     padding: 0;
@@ -58,14 +65,15 @@
     cursor: ew-resize;
     pointer-events: auto;
     border: 1px solid #ddd;
-    background-image: url(range-icon.png);
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAMAAAC5zwKfAAAABlBMVEV9fX3///+Kct39AAAAAnRSTlP/AOW3MEoAAAA9SURBVFjD7dehDQAwDANBZ/+l2wmKoiqR7pHRcaeaCxAIBAL/g7k9JxAIBAKBQCAQCAQC14H+MhAIBE4CD3fOFvGVBzhZAAAAAElFTkSuQmCC);
     background-position: 50% 50%;
     background-repeat: no-repeat;
     background-size: 40px 40px;
 }
+
 .leaflet-sbs-range::-moz-range-thumb {
     padding: 0;
-    right: 0    ;
+    right: 0;
     background: #fff;
     height: 40px;
     width: 40px;
@@ -73,27 +81,32 @@
     cursor: ew-resize;
     pointer-events: auto;
     border: 1px solid #ddd;
-    background-image: url(range-icon.png);
+    background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAMAAAC5zwKfAAAABlBMVEV9fX3///+Kct39AAAAAnRSTlP/AOW3MEoAAAA9SURBVFjD7dehDQAwDANBZ/+l2wmKoiqR7pHRcaeaCxAIBAL/g7k9JxAIBAKBQCAQCAQC14H+MhAIBE4CD3fOFvGVBzhZAAAAAElFTkSuQmCC);
     background-position: 50% 50%;
     background-repeat: no-repeat;
     background-size: 40px 40px;
 }
+
 .leaflet-sbs-range:disabled::-moz-range-thumb {
     cursor: default;
 }
+
 .leaflet-sbs-range:disabled::-ms-thumb {
     cursor: default;
 }
+
 .leaflet-sbs-range:disabled::-webkit-slider-thumb {
     cursor: default;
 }
+
 .leaflet-sbs-range:disabled {
     cursor: default;
 }
+
 .leaflet-sbs-range:focus {
-    outline: none!important;
+    outline: none !important;
 }
+
 .leaflet-sbs-range::-moz-focus-outer {
     border: 0;
 }
-
